@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Josef Timer</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black; /* Changed from #2e2e2e to black */
+      color: #ff4c4c; /* Dramatic red */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.4);
+    }
+
+    .timer {
+      font-size: 3em;
+      font-weight: bold;
+      text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.6);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+      .timer {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>How long ago we hung out with Josef</h1>
+  <div class="timer" id="timer">Loading...</div>
+
+  <script>
+    function updateTimer() {
+      const startDate = new Date("2025-05-01T21:38:00");
+      const now = new Date();
+      const diffMs = now - startDate;
+
+      const seconds = Math.floor(diffMs / 1000) % 60;
+      const minutes = Math.floor(diffMs / (1000 * 60)) % 60;
+      const hours = Math.floor(diffMs / (1000 * 60 * 60)) % 24;
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      const timerString = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      document.getElementById("timer").textContent = timerString;
+
+      // Flash background at the start of every minute (when seconds == 0)
+      if (seconds === 0) {
+        startFlashing();
+      }
+    }
+
+    function startFlashing() {
+      let flashCount = 0;
+      const flashInterval = setInterval(() => {
+        document.body.style.backgroundColor =
+          document.body.style.backgroundColor === "white" ? "black" : "white";
+        flashCount++;
+
+        if (flashCount >= 10) { // 10 flashes (5 seconds)
+          clearInterval(flashInterval);
+          document.body.style.backgroundColor = "black"; // Reset to black
+        }
+      }, 500);
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Initial call
+  </script>
+
+</body>
+</html>
